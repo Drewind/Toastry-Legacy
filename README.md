@@ -1,18 +1,16 @@
-## Getting Started
+## Toastry
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+A MVC restaurant analytics tool to discover trends and generate financial statements. Not finished and is still heavily a work-in-progress.
 
-## Folder Structure
+Part of my portfolio to showcase my skills in Java.
 
-The workspace contains two folders by default, where:
+## Screenshots
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+Below is a screenshot of the home view, where you can view all of the products and their margins.
+![Home Screenshot](media/images/home_preview.png?raw=true)
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+List of Views:
+- `Home`: the default view of the application, the dashboard.
+- `ProductView`: to add new products into the application.
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+Will continue to update this project in the future. Feel free to fork this project.
