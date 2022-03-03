@@ -1,0 +1,4 @@
+0,Admiral's Feasts,20.0,12.0,7,MAIN_DISH
+1,Bowl of Deliciousness,12.0,3.0,10,MAIN_DISH
+2,Triple Chocolate Brownies,5.0,1.0,4,MAIN_DISH
+3,Two Day old Soup,12.11,2.99,0,MAIN_DISH
