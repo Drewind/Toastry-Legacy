@@ -1,5 +1,6 @@
 ## Toastry
 
+![Logo](media/logos/Toastry-logos.jpeg?raw=true)
 A MVC restaurant analytics tool to discover trends and generate financial statements. Not finished and is still heavily a work-in-progress.
 
 Part of my portfolio to showcase my skills in Java.
@@ -14,3 +15,5 @@ List of Views:
 - `ProductView`: to add new products into the application.
 
 Will continue to update this project in the future. Feel free to fork this project.
+
+Logo created using [Adobe Express](https://www.adobe.com/express/create/logo).
