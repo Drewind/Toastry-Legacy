@@ -21,7 +21,7 @@ public class DefaultRowStyle extends DefaultTableCellRenderer
             setBackground( Styler.DARK_SHADE2_COLOR );
         else
         {
-            setBackground( Styler.APP_BG_COLOR );
+            setBackground( Styler.CONTAINER_BACKGROUND );
             // setBackground( table.getBackground() );
 
             try

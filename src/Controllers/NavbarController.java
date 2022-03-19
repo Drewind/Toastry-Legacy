@@ -14,7 +14,7 @@ public class NavbarController implements ControllerInterface {
         this.model = model;
 
         // Controller actions
-        this.creationView = new NavbarViewAction(model);
+        this.creationView = new NavbarViewAction();
     }
 
     @Override

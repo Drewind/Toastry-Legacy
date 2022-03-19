@@ -18,11 +18,13 @@ public class Product implements EntityInterface {
     private String name;
     private double price; // Current price listed
     private double cost; // Current cost to make
-    private ProductCategory category;
+    private ProductCategory category; // Assigned category
+    private boolean active; // If this product is purchaseable.
 
     private int totalSales = 0;
     private double totalExpenses = 0.0;
     private double totalRevenue = 0.0;
+    private double grossSales = 0.0; // Total sales prior to tax and expenses.
     private int dailySales = 0;
     private boolean hasChanged = false;
 
@@ -225,6 +227,14 @@ public class Product implements EntityInterface {
         return this.totalExpenses;
     }
 
+    public double getTotalGrossSales() {
+        return this.grossSales;
+    }
+
+    public boolean isActive() {
+        return this.active;
+    }
+
     /**
      * Prints out the entity's values in console.
      * @todo remove this
@@ -319,6 +329,15 @@ public class Product implements EntityInterface {
         this.totalExpenses += (this.dailySales * this.cost);
         this.dailySales = 0;
         this.hasChanged = true;
+    }
+
+    /**
+     * Sets if this product is active or not. If it is active, then
+     * customers may purchase it.
+     * @param state boolean
+     */
+    public void setActive(boolean state) {
+        this.active = state;
     }
 
     public void emptyMethod() {

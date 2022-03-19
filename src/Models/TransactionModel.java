@@ -21,7 +21,7 @@ import Utilities.Debugger;
 
 /**
  * TransactionModel
- * Loads, saves, and manages in-game purchases.
+ * Loads, saves, and manages purchases and their history.
  */
 public class TransactionModel implements IModelInterface<Transaction>, ModelObserver {
     private final File CSV_FILE = new File("transactions.txt");
@@ -35,6 +35,11 @@ public class TransactionModel implements IModelInterface<Transaction>, ModelObse
     public TransactionModel(IModelInterface<Product> model) {
         this.products = model;
     }
+
+    /**
+     * GUID [PK]  X  X  X  X
+     * 35FKDJ357  X  X  X  X
+     */
 
     /**
      * Loads into the application all of the transactions saved. Used during initialization.

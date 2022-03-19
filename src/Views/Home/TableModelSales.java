@@ -18,16 +18,16 @@ public class TableModelSales extends EntityTableModel {
         String name = null;
         switch (column) {
             case 0:
-                name = "Dish";
+                name = "Menu Item";
                 break;
             case 1:
-                name = "Price";
+                name = "QTY";
                 break;
             case 2:
-                name = "Cost";
+                name = "Net Sales";
                 break;
             case 3:
-                name = "Sales";
+                name = "Margin";
                 break;
         }
         return name;
@@ -51,6 +51,7 @@ public class TableModelSales extends EntityTableModel {
     }
 
     @Override
+    // wip
     public Object getValueAt(int rowIndex, int columnIndex) {
         Object value = null;
 

@@ -10,11 +10,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-@SuppressWarnings("serial")
 public class TitleBox extends JPanel {
     private final Color THEME_COLOR = new Color(240, 240, 240);
-    private final Font FONT = new Font("Arial", Font.BOLD, 14);
-    private final int WIDTH = 160;
+    private final Font FONT = new Font("Arial", Font.BOLD, 18);
+    private final int WIDTH = 350;
     private final int HEIGHT = 24;
 
     public TitleBox(String titleText, Color bgColor) {

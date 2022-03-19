@@ -38,6 +38,8 @@ public class App {
         initializeWindow();
         randomizeTestData(); // @todo remove this
 
+        MAIN_PANEL.setOpaque(false); // Set to invisble so the content pane background is visible.
+        window.getContentPane().setBackground(Styler.APP_BG_COLOR); // Sets content pane background.
         window.getContentPane().add(navController.getDefaultView(), BorderLayout.NORTH);
         window.getContentPane().add(MAIN_PANEL, BorderLayout.CENTER);
 
@@ -75,8 +77,9 @@ public class App {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setLayout(new BorderLayout());
 
-        window.setSize((int) SCREEN_SIZE.getWidth(), (int) SCREEN_SIZE.getHeight());
-        window.getContentPane().setBackground(Styler.APP_BG_COLOR);
+        // window.setSize((int) SCREEN_SIZE.getWidth(), (int) SCREEN_SIZE.getHeight());
+        window.setSize((int) 900, 550);
+        window.getContentPane().setBackground(Styler.CONTAINER_BACKGROUND);
 
         window.getContentPane().add(new RegularText("Developed by Andrew Michael"), BorderLayout.SOUTH);
     }

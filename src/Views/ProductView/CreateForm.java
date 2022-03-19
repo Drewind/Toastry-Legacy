@@ -51,7 +51,7 @@ public class CreateForm extends JPanel implements FormInterface<Product> {
 
     public CreateForm() {
         super(new GridBagLayout());
-        super.setBackground(Styler.APP_BG_COLOR);
+        super.setBackground(Styler.CONTAINER_BACKGROUND);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;

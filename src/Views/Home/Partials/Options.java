@@ -1,4 +1,4 @@
-package Views.Home;
+package Views.Home.Partials;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -14,7 +14,7 @@ import Utilities.Styler;
 public class Options extends JPanel {
     public Options(HomeController controller) {
         super(new BorderLayout());
-        super.setBackground(Styler.APP_BG_COLOR);
+        super.setBackground(Styler.CONTAINER_BACKGROUND);
         super.add(new TitleBox("Quick Options", Styler.DARK_SHADE2_COLOR), BorderLayout.NORTH);
 
         JPanel contentPanel = new JPanel();

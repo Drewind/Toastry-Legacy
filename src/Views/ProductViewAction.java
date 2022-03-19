@@ -47,6 +47,7 @@ public class ProductViewAction implements ViewActionInterface, ViewActionObserve
         JPanel container = new JPanel(new GridBagLayout());
         JPanel form = new CreateForm(); // Creating the form here so we can attach an observer to it
         this.createForm = (FormInterface<Product>)form;
+        container.setOpaque(false);
 
         TabButton formButton = new TabButton("Add Product");
         this.views.put("FormButton", formButton);
@@ -65,7 +66,7 @@ public class ProductViewAction implements ViewActionInterface, ViewActionObserve
         container.add(hopingforthebest, GBC.setGBC(gbc, 0, 1, 1.0));
         
         // Button to go back to home screen
-        TabButton backButton = new TabButton("Go Back", Styler.APP_BG_COLOR);
+        TabButton backButton = new TabButton("Go Back", Styler.CONTAINER_BACKGROUND);
         backButton.setForeground(Color.BLACK);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

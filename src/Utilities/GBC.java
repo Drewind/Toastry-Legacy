@@ -3,9 +3,11 @@ package Utilities;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
+import javax.swing.JPanel;
+
 public class GBC {
-    private static final int LAYOUT_MARGIN_X = 30;
-    private static final int LAYOUT_MARGIN_Y = 12;
+    private static final int LAYOUT_MARGIN_X = 22;
+    private static final int LAYOUT_MARGIN_Y = 16;
 
     /**
      * Used to set the layout constraints for an element.
@@ -50,8 +52,8 @@ public class GBC {
     }
 
     /**
-     * Used to anchor a component to the bottom of the layout. Be sure to set gridwidth to
-     * something larger than the rest of the layout elements (value of two should work most of the time).
+     * Used to anchor a component to the bottom of the layout via GBC.SOUTH constraints. Be sure to set gridwidth
+     * to something larger than the rest of the layout elements (value of two should work most of the time).
      * @param GridBagConstraints gbc
      * @param int x
      * @param int y
@@ -67,5 +69,15 @@ public class GBC {
         gbc.gridx = x;
         gbc.gridy = y;
         return gbc;
+    }
+
+    /**
+     * Simple method to return a blank panel to anchor to the bottom of a gridbag layout.
+     * @return
+     */
+    public static JPanel anchorPanel() {
+        JPanel panel = new JPanel();
+        panel.setOpaque(false);
+        return panel;
     }
 }

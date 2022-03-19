@@ -50,7 +50,7 @@ public class ProductTable extends JScrollPane {
 
     private JPanel populateTable() {
         JPanel container = new JPanel(new GridBagLayout());
-        container.setBackground(Styler.APP_BG_COLOR);
+        container.setBackground(Styler.CONTAINER_BACKGROUND);
         int rows = 0;
 
         // GBC

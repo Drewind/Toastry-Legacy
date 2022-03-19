@@ -1,21 +1,24 @@
-package Views.Home;
+package Views.Home.Partials;
 
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import Controllers.HomeController;
 import Entities.Product;
+import Graphics.Text.NOTINUSE;
 import Graphics.Text.TitleBox;
 import Interfaces.ControllerInterface;
 import Interfaces.ViewObserver;
 import Models.IModelInterface;
 import Models.ProductModel;
 import Utilities.Styler;
+import Views.Home.SalesTable;
 
 public class RecordSales extends JPanel implements ViewObserver {
     private final ProductModel model;
@@ -36,8 +39,12 @@ public class RecordSales extends JPanel implements ViewObserver {
             }
         });
 
-        super.add(new TitleBox("RECORD SALES", Styler.DARK_SHADE2_COLOR), BorderLayout.NORTH);
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+        topPanel.add(new TitleBox("RECORD SALES", Styler.DARK_SHADE2_COLOR));
+        topPanel.add(new NOTINUSE("Enter sales for today and click 'End Day'."));
 
+        super.add(topPanel, BorderLayout.NORTH);
         super.add(table.getPanel(), BorderLayout.CENTER); // testing, new concept
         super.add(submit, BorderLayout.SOUTH);
     }

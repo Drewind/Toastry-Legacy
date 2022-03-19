@@ -1,16 +1,18 @@
-package Views.Home;
+package Views.Home.Partials;
 
 import java.util.ArrayList;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import Entities.Product;
+import Graphics.Text.NOTINUSE;
 import Graphics.Text.TitleBox;
 import Interfaces.ViewObserver;
 import Models.ProductModel;
@@ -24,10 +26,10 @@ import Utilities.Styler;
  * @return JPanel
  * @todo add in daily sales and growth percentage
 */
-public class DailySales extends JPanel implements ViewObserver {
+public class TopSales extends JPanel implements ViewObserver {
     private JTable table;
 
-    public DailySales(int height, ArrayList<Product> productData, ProductModel model, AbstractTableModel tableModel) {
+    public TopSales(int height, ArrayList<Product> productData, ProductModel model, AbstractTableModel tableModel) {
         super(new BorderLayout());
         super.setMinimumSize(new Dimension(0, height));
         super.setPreferredSize(new Dimension(0, height));
@@ -42,7 +44,12 @@ public class DailySales extends JPanel implements ViewObserver {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        super.add(new TitleBox("DAILY SALES", Styler.DARK_SHADE2_COLOR), BorderLayout.NORTH);
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+        topPanel.add(new TitleBox("STORE FAVORITES", Styler.DARK_SHADE2_COLOR));
+        topPanel.add(new NOTINUSE("Best selling dishes from your restaurant."));
+
+        super.add(topPanel, BorderLayout.NORTH);
         super.add(scrollPane, BorderLayout.CENTER);
     }
 

@@ -35,7 +35,7 @@ public class Create extends JPanel {
             }
         });
 
-        TabButton cancelButton = new TabButton("Cancel", Styler.APP_BG_COLOR);
+        TabButton cancelButton = new TabButton("Cancel", Styler.CONTAINER_BACKGROUND);
         cancelButton.setForeground(Color.BLACK);
         cancelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

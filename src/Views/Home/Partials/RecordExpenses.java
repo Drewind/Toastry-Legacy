@@ -1,4 +1,4 @@
-package Views.Home;
+package Views.Home.Partials;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -9,7 +9,6 @@ import Graphics.Text.RegularText;
 import Graphics.Text.TitleBox;
 import Utilities.Styler;
 
-@SuppressWarnings("serial")
 public class RecordExpenses extends JPanel {
     public RecordExpenses() {
         super(new BorderLayout());
@@ -19,7 +18,7 @@ public class RecordExpenses extends JPanel {
         JPanel controlPanel = new JPanel();
         controlPanel.setLayout(new GridLayout(4, 2));
         controlPanel.setVisible(true);
-        controlPanel.setBackground(Styler.APP_BG_COLOR);
+        controlPanel.setBackground(Styler.CONTAINER_BACKGROUND);
         controlPanel.add(new RegularText("Cost of Ingredients"));
         controlPanel.add(new JSpinner());
         controlPanel.add(new RegularText("Salaries & Wages"));

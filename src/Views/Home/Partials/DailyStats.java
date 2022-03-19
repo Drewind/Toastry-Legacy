@@ -1,4 +1,4 @@
-package Views.Home;
+package Views.Home.Partials;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -37,7 +37,7 @@ public class DailyStats extends JPanel implements ViewObserver {
     
     public DailyStats(ModelObserver modelObserver) {
         super(new BorderLayout());
-        super.setBackground(Styler.APP_BG_COLOR);
+        super.setBackground(Styler.CONTAINER_BACKGROUND);
         super.setForeground(new Color(250, 250, 250));
 
         this.modelObserver = modelObserver;
