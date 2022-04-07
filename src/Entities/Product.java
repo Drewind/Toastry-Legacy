@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import Interfaces.EntityInterface;
+import Services.IDGenerator;
 
 /**
  * Product
@@ -14,7 +15,7 @@ import Interfaces.EntityInterface;
 public class Product implements EntityInterface {
     private final List<Consumer<Object>> CSV_LOAD_ORDER = new ArrayList<Consumer<Object>>();
     private final List<Supplier<Object>> CSV_SAVE_ORDER = new ArrayList<Supplier<Object>>();
-    private final int PRODUCT_ID; // Primary key
+    private final String PRODUCT_ID; // Primary key
     private String name;
     private double price; // Current price listed
     private double cost; // Current cost to make
@@ -23,8 +24,7 @@ public class Product implements EntityInterface {
 
     private int totalSales = 0;
     private double totalExpenses = 0.0;
-    private double totalRevenue = 0.0;
-    private double grossSales = 0.0; // Total sales prior to tax and expenses.
+    private double totalGrossSales = 0.0;
     private int dailySales = 0;
     private boolean hasChanged = false;
 
@@ -38,7 +38,7 @@ public class Product implements EntityInterface {
      */
     public Product(String name, double cost, double price, ProductCategory category) {
         super();
-        this.PRODUCT_ID = 2;
+        this.PRODUCT_ID = IDGenerator.generateGUID();
         this.name = name;
         this.cost = cost;
         this.price = price;
@@ -62,12 +62,12 @@ public class Product implements EntityInterface {
         this.cost = cost;
         this.totalSales = totalSales;
         this.category = category;
-        this.PRODUCT_ID = id;
+        this.PRODUCT_ID = IDGenerator.generateGUID();
 
         setSaveOrder();
     }
 
-    public Product(final int ID) {
+    public Product(final String ID) {
         this.PRODUCT_ID = ID;
         setLoadOrder();
         setSaveOrder();
@@ -113,7 +113,7 @@ public class Product implements EntityInterface {
      * Retrieves this entity's unique ID.
      * @return int
      */
-    public int getID() {
+    public String getID() {
         return this.PRODUCT_ID;
     }
 
@@ -216,7 +216,7 @@ public class Product implements EntityInterface {
      * @return double
      */
     public double getTotalRevenue() {
-        return this.totalRevenue;
+        return this.totalGrossSales;
     }
 
     /**
@@ -227,12 +227,20 @@ public class Product implements EntityInterface {
         return this.totalExpenses;
     }
 
-    public double getTotalGrossSales() {
-        return this.grossSales;
-    }
-
+    /**
+     * Returns if the product is active or not.
+     * @return
+     */
     public boolean isActive() {
         return this.active;
+    }
+
+    /**
+     * Called internally to load total sales from the DB to the entity.
+     * @param totalSales
+     */
+    private void loadTotalSales(final int totalSales) {
+        this.totalSales = totalSales;
     }
 
     /**
@@ -268,15 +276,8 @@ public class Product implements EntityInterface {
     }
 
     /**
-     * Called internally to load total sales from the DB to the entity.
-     * @param totalSales
-     */
-    private void loadTotalSales(final int totalSales) {
-        this.totalSales = totalSales;
-    }
-
-    /**
      * Assigns a cost to this product.
+     * @todo add this to the change history table
      * @param cost double
      * @return void
      */
@@ -287,6 +288,7 @@ public class Product implements EntityInterface {
 
     /**
      * Assigns the price of this product.
+     * @todo add this to the change history table
      * @param price double
      * @return void
      */
@@ -297,22 +299,12 @@ public class Product implements EntityInterface {
 
     /**
      * Assigns the category to this product.
+     * @todo add this to the change history table
      * @param category
      * @return void
      */
     public void setCategory(ProductCategory category) {
         this.category = category;
-        this.hasChanged = true;
-    }
-
-    /**
-     * Assigns sales made from yesterday to this product.
-     * Done as a closing assignment to end the day.
-     * @param sales
-     * @return void
-     */
-    public void setDailySales(int sales) {
-        this.dailySales = sales;
         this.hasChanged = true;
     }
 
@@ -325,15 +317,27 @@ public class Product implements EntityInterface {
      */
     public void computeEndOfDay() {
         this.totalSales += this.dailySales;
-        this.totalRevenue += (this.dailySales * this.price);
+        this.totalGrossSales += (this.dailySales * this.price);
         this.totalExpenses += (this.dailySales * this.cost);
         this.dailySales = 0;
         this.hasChanged = true;
     }
 
     /**
+     * Add sales to this product. Increments total sales, total reveneue/expenses.
+     * @todo add a way to discount items
+     * @param quantity
+     */
+    public void addSale(int quantity) {
+        this.totalSales += quantity;
+        this.totalExpenses += (quantity * cost);
+        this.totalGrossSales += (quantity * price);
+    }
+
+    /**
      * Sets if this product is active or not. If it is active, then
      * customers may purchase it.
+     * @todo add this to the change history table
      * @param state boolean
      */
     public void setActive(boolean state) {

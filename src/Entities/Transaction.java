@@ -1,11 +1,17 @@
 package Entities;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import Constants.TransactionOutcome;
 import Interfaces.EntityInterface;
+import Services.IDGenerator;
 
 /**
  * Represents a single transaction for a customer.
@@ -13,22 +19,23 @@ import Interfaces.EntityInterface;
 public class Transaction implements EntityInterface {
     private final List<Consumer<Object>> CSV_LOAD_ORDER = new ArrayList<Consumer<Object>>();
     private final List<Supplier<Object>> CSV_SAVE_ORDER = new ArrayList<Supplier<Object>>();
-    private final int TRANSACTION_ID; // Primary key
-    private final int PRODUCT_ID;
-    private final int PURCHASE_DAY; // In-game day for which this was bought
-    private final int NUMBER_SERVED;
-    private final double PRICE;
-    private final double COST;
-    
+    private final String TRANSACTION_ID; // Primary key using custom-built GUID
+    private final HashMap<Product, Integer> PRODUCTS_PURCHASED;
+    private final Date PURCHASE_DATE;
+    private final int TABLE_SIZE;
+
+    private TransactionOutcome stage = TransactionOutcome.CREATED;
+    private double subtotal;
+    private double total;
+    private double COGS;
     private boolean hasChanged = false;
 
-    public Transaction(final int ID, final int BOUGHT_ON, final Product product) {
-        this.TRANSACTION_ID = ID;
-        this.PRODUCT_ID = product.getID();
-        this.PURCHASE_DAY = BOUGHT_ON;
-        this.NUMBER_SERVED = product.getDailySales();
-        this.PRICE = product.getPrice();
-        this.COST = product.getCost();
+    public Transaction(final HashMap<Product, Integer> productsBought, final int tableSize) {
+        this.TRANSACTION_ID = IDGenerator.generateGUID();
+        this.PURCHASE_DATE = new Date();
+        this.TABLE_SIZE = tableSize;
+        this.PRODUCTS_PURCHASED = productsBought;
+        processProducts();
         setLoadOrder();
         setSaveOrder();
     }
@@ -36,7 +43,7 @@ public class Transaction implements EntityInterface {
     /* ___________________________________________
                         GETTERS
     ___________________________________________ */
-    public int getID() {
+    public String getID() {
         return this.TRANSACTION_ID;
     }
 
@@ -48,24 +55,33 @@ public class Transaction implements EntityInterface {
         return this.CSV_SAVE_ORDER;
     }
 
-    public int getProductID() {
-        return this.PRODUCT_ID;
+    /**
+     * Retrieves a set of all products purchased in this transaction.
+     * Since this is a set, it will be unique products without duplicates.
+     * @return Set<Product>
+     */
+    public Set<Product> getPurchases() {
+        return this.PRODUCTS_PURCHASED.keySet();
     }
 
-    public int getPurchaseDay() {
-        return this.PURCHASE_DAY;
+    public final Date getPurchaseDate() {
+        return this.PURCHASE_DATE;
     }
 
+    /**
+     * Retrieves how many customers were at this table during this transaction.
+     * @return int
+     */
     public int getNumberServed() {
-        return this.NUMBER_SERVED;
+        return this.TABLE_SIZE;
     }
-
-    public double getPrice() {
-        return this.PRICE;
-    }
-
-    public double getCost() {
-        return this.COST;
+    
+    /**
+     * Retrieves which stage this transaction is currently at.
+     * @return
+     */
+    public TransactionOutcome getStage() {
+        return this.stage;
     }
 
     /**
@@ -89,18 +105,16 @@ public class Transaction implements EntityInterface {
      * @todo remove this
      */
     public void debugEntity() {
-        System.out.println(
+        System.out.printf(
             "\n------------------------------------" +
-            "\n--| DEBUGGER |--" +
-            "\nClass " + this.getClass().getCanonicalName() + ";" +
-            "\n * ID: " + this.TRANSACTION_ID +
-            "\n * Product ID: " + this.PRODUCT_ID +
-            "\n * Bought on: " + this.PURCHASE_DAY +
-            "\n * Served: " + this.NUMBER_SERVED +
-            "\n * Price: " + this.PRICE +
-            "\n * Cost: " + this.COST +
-            "\n-----------------------------------"
-        );
+            "\nClass %10s:" +
+            "\n * GUID: %10s" + " * Purchase Date: %10s" +
+            "\n * Served: %10s" + " * Price/Cost: %s/%s" +
+            "\n * COGS: %s10" +
+            "\n------------------------------------",
+            this.getClass().getCanonicalName(),
+            this.TRANSACTION_ID, this.PURCHASE_DATE,
+            this.TABLE_SIZE, this.subtotal, this.total, this.COGS);
     }
 
     /* ___________________________________________
@@ -119,10 +133,22 @@ public class Transaction implements EntityInterface {
     private void setSaveOrder() {
         // Sets load order operations
         this.CSV_SAVE_ORDER.add(this::getID);
-        this.CSV_SAVE_ORDER.add(this::getProductID);
-        this.CSV_SAVE_ORDER.add(this::getPurchaseDay);
-        this.CSV_SAVE_ORDER.add(this::getPrice);
-        this.CSV_SAVE_ORDER.add(this::getCost);
         this.CSV_SAVE_ORDER.add(this::getNumberServed);
+    }
+
+    /**
+     * Completes this transaction.
+     */
+    private void processProducts() {
+        Product product;
+
+        this.stage = TransactionOutcome.PENDING;
+
+        for (Map.Entry<Product, Integer> entry : this.PRODUCTS_PURCHASED.entrySet()) {
+            product = entry.getKey();
+            System.out.print(" >> Processing '" + product.getProductName() + "'.");
+            product.addSale(entry.getValue());
+            this.stage = TransactionOutcome.COMPLETED;
+        }
     }
 }

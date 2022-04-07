@@ -14,7 +14,7 @@ import java.util.function.Supplier;
  * @method getSaveOrder: list of methods to persist a entity to the DB.
  */
 public interface EntityInterface {
-    public int getID();
+    public String getID();
     public boolean hasChanged();
     public void resetChangedState();
     public List<Consumer<Object>> getLoadOrder();
