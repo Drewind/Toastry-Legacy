@@ -3,14 +3,14 @@ package Services.Commands;
 import Entities.Product;
 import Interfaces.Command;
 import Models.DailyStatsModel;
-import Models.IModelInterface;
+import Models.ProductModel;
 
 public class ComputeEndOfDay implements Command {
     final private DailyStatsModel statsModel;
-    final private IModelInterface<Product> productModel;
+    final private ProductModel productModel;
 
-    public ComputeEndOfDay(final DailyStatsModel statsModel, final IModelInterface<Product> productModel) {
-        this.statsModel = statsModel;
+    public ComputeEndOfDay(final DailyStatsModel stats, final ProductModel productModel) {
+        this.statsModel = stats;
         this.productModel = productModel;
     }
 

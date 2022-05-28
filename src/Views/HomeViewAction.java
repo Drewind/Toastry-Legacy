@@ -3,36 +3,32 @@ package Views;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.util.HashMap;
 import java.util.List;
 
 import Controllers.HomeController;
 import Controllers.ViewActionInterface;
+import Entities.Entity;
 import Entities.Product;
 import Interfaces.ControllerInterface;
 import Interfaces.ViewActionObserver;
 import Models.DailyStatsModel;
-import Models.IModelInterface;
+import Models.Model;
 import Models.ProductModel;
 import Views.Home.Dashboard;
-import Views.Home.SalesTable;
+import Views.Home.StandardTable;
 import Views.Home.TMTopSales;
 import Views.Home.TableModelSales;
-import Utilities.GBC;
 
-public class HomeViewAction implements ViewActionInterface, ViewActionObserver<Product> {
+public class HomeViewAction implements ViewActionInterface, ViewActionObserver {
     private final ProductModel model;
-    private final DailyStatsModel stats;
     private final HomeController controller;
     private HashMap<String, JComponent> views = new HashMap<>();
     private TMTopSales tableModel;
     private TableModelSales dailySalesTM;
 
-    public HomeViewAction(ControllerInterface controller, IModelInterface<?> model, DailyStatsModel stats) {
-        this.model = (ProductModel)model;
-        this.stats = (DailyStatsModel)stats;
+    public HomeViewAction(ControllerInterface controller, Model productModel, DailyStatsModel statsModel) {
+        this.model = (ProductModel)productModel;
         this.controller = (HomeController)controller;
 
         this.model.registerObserver(this);
@@ -49,10 +45,10 @@ public class HomeViewAction implements ViewActionInterface, ViewActionObserver<P
 
         dailySalesTM = new TableModelSales(this.model.getEntities());
 
-        SalesTable form = new SalesTable(dailySalesTM);
+        StandardTable form = new StandardTable(dailySalesTM);
         this.views.put("Form", form);
 
-        return new Dashboard(this.stats, this.model);
+        return new Dashboard(this.controller, this.model);
     }
 
     /**
@@ -65,19 +61,19 @@ public class HomeViewAction implements ViewActionInterface, ViewActionObserver<P
     }
 
     @Override
-    public void notifyNewEntity(Product product) {
+    public void notifyNewEntity(Entity product) {
         this.tableModel.addRow(product);
         this.dailySalesTM.addRow(product);
     }
 
     @Override
-    public void notifyRemovedEntity(Product product) {
+    public void notifyRemovedEntity(Entity product) {
         this.tableModel.removeRow(product);
         this.dailySalesTM.removeRow(product);
     }
 
     @Override
-    public void notifyModifiedEntity(Product product) {
+    public void notifyModifiedEntity(Entity product) {
         this.tableModel.updateRow(product);
         this.dailySalesTM.updateRow(product);
     }

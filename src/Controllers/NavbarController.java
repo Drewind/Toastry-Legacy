@@ -3,15 +3,13 @@ package Controllers;
 import javax.swing.JPanel;
 
 import Interfaces.ControllerInterface;
-import Models.IModelInterface;
+import Models.Model;
 import Views.NavbarViewAction;
 
 public class NavbarController implements ControllerInterface {
-    private IModelInterface<?> model;
     private NavbarViewAction creationView;
 
-    public NavbarController(IModelInterface<?> model) {
-        this.model = model;
+    public NavbarController(Model locationmodel) {
 
         // Controller actions
         this.creationView = new NavbarViewAction();

@@ -6,8 +6,8 @@ package Interfaces;
  * implement the standard ModelObserver interface.
  */
 public interface ModelEntityObserver<T> {
-    public void registerObserver(ViewActionObserver<T> observer);
-    public void removeObserver(ViewActionObserver<T> observer);
+    public void registerObserver(ViewActionObserver observer);
+    public void removeObserver(ViewActionObserver observer);
     // public T notifyEntityAdded();
     // public T notifyEntityRemoved();
     // public T notifyEntityModified();

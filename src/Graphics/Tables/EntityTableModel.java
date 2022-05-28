@@ -1,20 +1,21 @@
 package Graphics.Tables;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import Interfaces.EntityInterface;
 
 public class EntityTableModel extends AbstractTableModel {
-    protected List<EntityInterface> entities;
+    protected HashMap<String, EntityInterface> entities;
 
     public EntityTableModel() {
-        this.entities = new ArrayList<>(10);
+        this.entities = new HashMap<>();
     }
 
     public void addRow(EntityInterface entity) {
         try {
-            this.entities.add(entity);
+            this.entities.put(entity.getID(), entity);
             fireTableRowsInserted(this.entities.size() - 1, this.entities.size() - 1);
         } catch (Exception ex) {
             System.out.println("Warning: couldn't add new entity to EntityTableMOdel.java.");
@@ -23,7 +24,7 @@ public class EntityTableModel extends AbstractTableModel {
 
     public void removeRow(EntityInterface entity) {
         try {
-            this.entities.remove(entity);
+            this.entities.remove(entity.getID());
             fireTableRowsDeleted(this.entities.size() - 1, this.entities.size() - 1);
         } catch (Exception ex) {
             System.out.println("Warning: couldn't remove entity to EntityTableModel.java.");
@@ -32,7 +33,7 @@ public class EntityTableModel extends AbstractTableModel {
 
     public void updateRow(EntityInterface entity) {
         try {
-            this.entities.set(entity.getID(), entity);
+            this.entities.put(entity.getID(), entity);
 
             fireTableRowsUpdated(this.entities.size() - 1, this.entities.size() - 1);
         } catch (Exception ex) {
@@ -40,14 +41,14 @@ public class EntityTableModel extends AbstractTableModel {
         }
     }
 
-    public EntityInterface getEntityAt(int row) {
-        return this.entities.get(row);
-    }
+    // public EntityInterface getEntityAt(int row) {
+    //     return this.entities.get(row);
+    // }
 
     public List<EntityInterface> getChangedEntities() {
         List<EntityInterface> changed = new ArrayList<>(this.entities.size());
 
-        for (EntityInterface entity : this.entities) {
+        for (EntityInterface entity : this.entities.values()) {
             if (entity.hasChanged()) {
                 changed.add(entity);
                 entity.resetChangedState();

@@ -12,31 +12,32 @@ import java.awt.event.ActionEvent;
 
 import Controllers.ProductController;
 import Controllers.ViewActionInterface;
+import Entities.Entity;
 import Entities.Product;
 import Entities.ProductCategory;
 import Graphics.TabButton;
 import Interfaces.ControllerInterface;
 import Interfaces.FormInterface;
 import Interfaces.ViewActionObserver;
-import Models.IModelInterface;
+import Models.Model;
 import Models.ProductModel;
+import Services.IDGenerator;
 import Views.ProductView.Create;
 import Views.ProductView.CreateForm;
 import Views.ProductView.ProductsTable.ProductView;
 import Views.ProductView.ProductsTable.TableModel;
 import Utilities.GBC;
-import Utilities.Styler;
 
 @SuppressWarnings("unchecked")
-public class ProductViewAction implements ViewActionInterface, ViewActionObserver<Product> {
+public class ProductViewAction implements ViewActionInterface, ViewActionObserver {
     private final ProductModel model;
     private final ProductController controller;
     private FormInterface<Product> createForm;
     private HashMap<String, JComponent> views = new HashMap<>();
     private TableModel tableModel = new TableModel();
 
-    public ProductViewAction(ControllerInterface controller, IModelInterface<?> model) {
-        this.model = (ProductModel)model;
+    public ProductViewAction(ControllerInterface controller, Model model2) {
+        this.model = (ProductModel)model2;
         this.controller = (ProductController)controller;
 
         this.model.registerObserver(this);
@@ -66,7 +67,7 @@ public class ProductViewAction implements ViewActionInterface, ViewActionObserve
         container.add(hopingforthebest, GBC.setGBC(gbc, 0, 1, 1.0));
         
         // Button to go back to home screen
-        TabButton backButton = new TabButton("Go Back", Styler.CONTAINER_BACKGROUND);
+        TabButton backButton = new TabButton("Go Back");
         backButton.setForeground(Color.BLACK);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -103,13 +104,13 @@ public class ProductViewAction implements ViewActionInterface, ViewActionObserve
         Product product;
 
         if ((formInputs.get("UID") != null) && this.model.entityExists(
-            Integer.parseInt(formInputs.get("UID").toString()))) {
+            formInputs.get("UID").toString())) {
                 System.out.println("\nViewAction: modifying product.");
-                final int UID = Integer.parseInt(formInputs.get("UID").toString());
+                final String UID = formInputs.get("UID").toString();
                 product = this.model.getEntity(UID);
         } else {
             System.out.println("\nViewAction: creating new product.");
-            product = new Product(this.model.generateID());
+            product = new Product(IDGenerator.generateGUID());
         }
 
         // If using the consumer approach
@@ -128,17 +129,17 @@ public class ProductViewAction implements ViewActionInterface, ViewActionObserve
     }
 
     @Override
-    public void notifyNewEntity(Product product) {
+    public void notifyNewEntity(Entity product) {
         this.tableModel.addRow(product);
     }
 
     @Override
-    public void notifyRemovedEntity(Product product) {
-        this.tableModel.removeRow(product.getID());
+    public void notifyRemovedEntity(Entity product) {
+        this.tableModel.removeRow(product);
     }
 
     @Override
-    public void notifyModifiedEntity(Product product) {
+    public void notifyModifiedEntity(Entity product) {
         this.tableModel.updateRow(product);
     }
 }

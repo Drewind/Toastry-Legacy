@@ -1,3 +1,4 @@
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -5,32 +6,30 @@ import Constants.ActiveController;
 import Controllers.HomeController;
 import Controllers.NavbarController;
 import Controllers.ProductController;
-import Entities.Location;
+import Entities.Entity;
 import Entities.Product;
-import Entities.Transaction;
 import Graphics.Text.RegularText;
 import Models.DailyStatsModel;
-import Models.IModelInterface;
 import Models.LocationModel;
+import Models.Model;
 import Models.ProductModel;
-import Models.TransactionModel;
 import Utilities.Styler;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.image.BufferedImage;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
 
 public class App {
     private static JFrame window;
     private static HomeController homeController;
     private static ProductController productController;
     private static NavbarController navController;
-    private static IModelInterface<Product> productModel;
-    private static IModelInterface<Location> locationModel;
-    private static IModelInterface<Transaction> transactionModel;
+    private static final ProductModel productModel = new ProductModel();
+    private static final Model locationModel = new LocationModel();
     private static DailyStatsModel statsModel;
-    private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     private static final JPanel MAIN_PANEL = new JPanel(new CardLayout());
     
     public static void main(String[] args) throws Exception {
@@ -43,32 +42,27 @@ public class App {
         window.getContentPane().add(navController.getDefaultView(), BorderLayout.NORTH);
         window.getContentPane().add(MAIN_PANEL, BorderLayout.CENTER);
 
+        // App icon
+        try {
+            BufferedImage logoImage = ImageIO.read(new File("media/logos/Toastry-logos_transparent.png"));
+            Image logo = logoImage.getScaledInstance(256, 256, Image.SCALE_SMOOTH);
+            window.setIconImage(logo);
+        } catch (IOException ex) {
+            System.out.println("WARNING: Couldn't load application icon.");
+        }
+
         //MAIN_PANEL.add(this.createHomeCard(), "main");
         MAIN_PANEL.add(homeController.getDefaultView(), ActiveController.HOME.name());
         MAIN_PANEL.add(productController.getDefaultView(), ActiveController.PRODUCT.name());
     }
 
     private static void initializeControllers() {
-        // Products (initialize)
-        productModel = new ProductModel();
-        productModel.loadEntities();
-
-        // Stats (requires productModel initialized)
         statsModel = new DailyStatsModel();
 
         // Products (initialize, load in productModel)
         productController = new ProductController(productModel, MAIN_PANEL);
-
-        // Home
-        homeController = new HomeController(productModel, transactionModel, statsModel, MAIN_PANEL);
-
-        // Locations
-        locationModel = new LocationModel();
-        locationModel.loadEntities();
+        homeController = new HomeController(productModel, statsModel, MAIN_PANEL);
         navController = new NavbarController(locationModel);
-
-        // Transactions
-        transactionModel = new TransactionModel(productModel);
     }
 
     private static void initializeWindow() {
@@ -94,10 +88,10 @@ public class App {
         int Max = 10;
         int randomInt;
 
-        for (Product product : productModel.getEntities()) {
+        for (Entity product : productModel.getEntities()) {
             randomInt = Min + (int)(Math.random() * ((Max - Min) + 1));
-            System.out.println("APP: #" + product.getID() + " " + product.getProductName() + "'s YSales now at " + randomInt);
-            product.setDailySales(randomInt);
+            System.out.println("APP: #" + product.getID() + " " + ((Product)product).getProductName() + "'s YSales now at " + randomInt);
+            ((Product)product).addSale(randomInt);
         }
     }
 }

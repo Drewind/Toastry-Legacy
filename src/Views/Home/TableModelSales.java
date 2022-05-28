@@ -1,14 +1,16 @@
 package Views.Home;
 
 import java.util.ArrayList;
+import java.util.Collection;
+
 import Entities.Product;
 import Graphics.Tables.EntityTableModel;
 import Interfaces.EntityInterface;
 
 public class TableModelSales extends EntityTableModel {
-    public TableModelSales(ArrayList<Product> products) {
+    public TableModelSales(Collection<Product> collection) {
         super();
-        for (Product entity : products) {
+        for (Product entity : collection) {
             super.addRow(entity);
         }
     }
@@ -40,9 +42,9 @@ public class TableModelSales extends EntityTableModel {
 
     public ArrayList<Product> getChangedProducts() {
         ArrayList<Product> entities = new ArrayList<>(super.getRowCount());
-        for (EntityInterface entity : super.entities) {
+        for (EntityInterface entity : super.entities.values()) {
             try {
-                this.entities.add((Product)entity);
+                this.entities.put(entity.getID(), entity);
             } catch (Exception ex) {
                 System.out.println("Warning: TableModelSales couldn't convert entity to product, getChangedProducts.");
             }
@@ -95,7 +97,7 @@ public class TableModelSales extends EntityTableModel {
                         p.setCost(Double.parseDouble(aValue.toString()));
                         break;
                     case 3:
-                        p.setDailySales(Integer.parseInt(aValue.toString()));
+                        p.addSale(Integer.parseInt(aValue.toString()));
                         break;
                 }
             } catch (Exception ex) {

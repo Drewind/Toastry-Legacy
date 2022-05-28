@@ -1,24 +1,13 @@
 package Entities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
-import Interfaces.EntityInterface;
-
 /**
  * Location
  * An entity for a single location. Defines variables and methods for a product.
  */
-public class Location implements EntityInterface {
-    private final List<Supplier<Object>> CSV_SAVE_ORDER = new ArrayList<Supplier<Object>>();
-    private final List<Consumer<Object>> CSV_LOAD_ORDER = new ArrayList<Consumer<Object>>();
-    private final int UID; // Primary key
-    private final double rent;
+public class Location extends Entity{
+    private double rent;
     private String name;
     private boolean isCorporate;
-    private boolean hasChanged = false;
 
     /**
      * Location
@@ -26,14 +15,14 @@ public class Location implements EntityInterface {
      * @param name string
      * @param corporate boolean; a corporate location or not
      */
-    public Location(String name, final double rent, boolean corporate) {
-        this.UID = 0;
+    public Location(String name, double rent, boolean corporate) {
+        super();
         this.name = name;
         this.rent = rent;
         this.isCorporate = corporate;
 
-        setSaveOrder();
-        setLoadOrder();
+        super.setSaveOrder();
+        super.setLoadOrder();
     }
 
     /**
@@ -43,12 +32,8 @@ public class Location implements EntityInterface {
      * @param uid int; unique identifier for this entity
      * @param corporate boolean; a corporate location or not
      */
-    public Location(String name, int uid, final double rent, boolean corporate) {
-        this.UID = uid;
-        this.name = name;
-        this.rent = rent;
-        this.isCorporate = corporate;
-
+    public Location(String UID) {
+        super(UID);
         setSaveOrder();
         setLoadOrder();
     }
@@ -56,19 +41,7 @@ public class Location implements EntityInterface {
     /* ___________________________________________
                         GETTERS
     ___________________________________________ */
-    public List<Consumer<Object>> getLoadOrder() {
-        return this.CSV_LOAD_ORDER;
-    }
-
-    public List<Supplier<Object>> getSaveOrder() {
-        return this.CSV_SAVE_ORDER;
-    }
-
-    public int getID() {
-        return this.UID;
-    }
-
-    public boolean getCorporateValue() {
+    public boolean isCorporateLocation() {
         return this.isCorporate;
     }
 
@@ -85,14 +58,6 @@ public class Location implements EntityInterface {
         return this.name;
     }
 
-    /**
-     * Returns whether the entity has been modified.
-     * @return boolean
-     */
-    public boolean hasChanged() {
-        return this.hasChanged;
-    }
-
     /* ___________________________________________
                         SETTERS
     ___________________________________________ */
@@ -100,16 +65,18 @@ public class Location implements EntityInterface {
     /**
      * Functions to call in order to safely modify the textfile database.
      */
-    private void setSaveOrder() {
-        // Sets load order operations
+    @Override
+    protected void setSaveOrder() {
         this.CSV_SAVE_ORDER.add(this::getLocationName);
-        this.CSV_SAVE_ORDER.add(this::getCorporateValue);
+        this.CSV_SAVE_ORDER.add(this::isCorporateLocation);
     }
 
     /**
-     * Functions to call when the RecordSales submit button is pressed.
+     * Methods to call to load a enitty from the database into the application.
      */
-    private void setLoadOrder() {
+    @Override
+    protected void setLoadOrder() {
+        this.CSV_LOAD_ORDER.add(a -> emptyMethod());
         this.CSV_LOAD_ORDER.add(a -> setLocationName(a.toString()));
         this.CSV_LOAD_ORDER.add(a -> setCorporateValue(Boolean.parseBoolean(a.toString())));
     }
@@ -123,10 +90,32 @@ public class Location implements EntityInterface {
     }
 
     /**
-     * Will reset this entity's hasChanged state; indicating this entity has not been modified.
-     * @return void
+     * Prints out the entity's values in console.
+     * @todo remove this
      */
-    public void resetChangedState() {
-        this.hasChanged = false;
+    public void debugEntity() {
+        // Print header
+        System.out.println("\n------------------------------------" +
+                "\n--| DEBUGGER |--" +
+                "\nClass: " + this.getClass().getCanonicalName() + "\n" +
+                (super.hasChanged() ? " | PENDING CHANGES |" : "CURRENT") +
+                "\nOriginal Data\n" + super.getOriginalData() + "\n"
+        );
+
+        // Print fields
+        System.out.printf(
+            "\n * %16s: %s" +
+            "\n * %16s: %s" +
+            "\n * %16s: %s" +
+            "\n * %16s: %s" +
+            "\n------------------------------------",
+            "Location Name", this.getLocationName(),
+            "Rent", this.getRent(),
+            "Is Corporate", (this.isCorporateLocation() ? "true" : "false"),
+            "Save/Load Ops", this.CSV_SAVE_ORDER.size() + "/" + this.CSV_LOAD_ORDER.size()
+        );
+    }
+
+    public void emptyMethod() {
     }
 }

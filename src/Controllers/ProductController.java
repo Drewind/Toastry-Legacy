@@ -6,17 +6,15 @@ import javax.swing.JPanel;
 
 import Interfaces.ControllerInterface;
 import Constants.ActiveController;
-import Entities.Product;
-import Models.IModelInterface;
+import Models.Model;
 import Views.ProductViewAction;
-import Views.Popups.Popup;
 
 public class ProductController implements ControllerInterface {
-    private IModelInterface<Product> model;
+    private Model model;
     private ProductViewAction creationView;
     private final JPanel contentPane;
 
-    public ProductController(IModelInterface<Product> model, final JPanel contentPane) {
+    public ProductController(Model model, final JPanel contentPane) {
         this.model = model;
         this.contentPane = contentPane;
 
@@ -41,31 +39,31 @@ public class ProductController implements ControllerInterface {
      * @param productID Integer UID of the product
      * @return void
      */
-    public void editProductScreen(Integer productID) {
-        Product product = (Product)this.model.getEntity(productID);
-        if (product != null) {
-            this.creationView.editProductScreen(product);
-        }
+    public void editProductScreen(String UID) {
+        // Product product = (Product)this.model.getEntity(productID);
+        // if (product != null) {
+        //     this.creationView.editProductScreen(product);
+        // }
     }
 
     public void submitProductForm() {
-        Product product = this.creationView.getProductFromForm();
+        // Product product = this.creationView.getProductFromForm();
 
-        if (this.model.entityExists(product.getID())) {
-            if (this.model.editEntity(product)) {
-                Popup.infoBox("Success!", "Product edited!");
-            } else {
-                Popup.infoBox("Error!", "Unfortunately, an exception occurred while saving.");
-            }
-        } else {
-            if (this.model.createEntity(product)) {
-                Popup.infoBox("Success!", "Product created and saved!");
-            } else {
-                Popup.infoBox("Error!", "Unfortunately, an exception occurred while saving.");
-            }
-        }
+        // if (this.model.entityExists(product.getID())) {
+        //     if (this.model.editEntity(product)) {
+        //         Popup.infoBox("Success!", "Product edited!");
+        //     } else {
+        //         Popup.infoBox("Error!", "Unfortunately, an exception occurred while saving.");
+        //     }
+        // } else {
+        //     if (this.model.createEntity(product)) {
+        //         Popup.infoBox("Success!", "Product created and saved!");
+        //     } else {
+        //         Popup.infoBox("Error!", "Unfortunately, an exception occurred while saving.");
+        //     }
+        // }
         
-        this.creationView.resetForm();
+        // this.creationView.resetForm();
     }
 
     /**
@@ -74,18 +72,18 @@ public class ProductController implements ControllerInterface {
      * @param UID int
      * @return void
      */
-    public void deleteProduct(int UID) {
-        if (this.model.entityExists(UID)) {
-            if (this.model.deleteEntity(this.model.getEntity(UID))) {
-                Popup.infoBox("Success!", "Product was removed!");
-                return;
-            }
-        } else {
-            System.out.println("Warning: ProductController could not delete entity "
-                + "with ID of #" + UID + " becaues it doesn't exist.");
-        }
+    public void deleteProduct(String UID) {
+        // if (this.model.entityExists(UID)) {
+        //     if (this.model.deleteEntity(this.model.getEntity(UID))) {
+        //         Popup.infoBox("Success!", "Product was removed!");
+        //         return;
+        //     }
+        // } else {
+        //     System.out.println("Warning: ProductController could not delete entity "
+        //         + "with ID of #" + UID + " becaues it doesn't exist.");
+        // }
 
-        Popup.infoBox("Error!", "Unfortunately, an exception occurred while deleting entity.");
+        // Popup.infoBox("Error!", "Unfortunately, an exception occurred while deleting entity.");
     }
 
     @Override

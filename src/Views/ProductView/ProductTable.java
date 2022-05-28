@@ -57,7 +57,6 @@ public class ProductTable extends JScrollPane {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = Styler.DEFAULT_MARGINS;
 
         // Headers
         for (int i = 0; i < this.COLUMNS.length; i++) {
@@ -79,17 +78,17 @@ public class ProductTable extends JScrollPane {
             viewProduct.setSize(new Dimension(0, 150));
             viewProduct.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    controller.editProductScreen(Integer.parseInt(viewProduct.getName()));
+                    controller.editProductScreen(viewProduct.getName());
                 }
             });
 
-            TabButton deleteProduct = new TabButton("Delete", Styler.DangerColor());
+            TabButton deleteProduct = new TabButton("Delete");
             deleteProduct.setForeground(Color.WHITE);
             deleteProduct.setName(String.valueOf(i));
             deleteProduct.setSize(new Dimension(0, 150));
             deleteProduct.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    controller.deleteProduct(Integer.parseInt(deleteProduct.getName()));
+                    controller.deleteProduct(deleteProduct.getName());
                 }
             });
 

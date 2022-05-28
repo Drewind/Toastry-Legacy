@@ -1,32 +1,20 @@
 package Entities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
-import Interfaces.EntityInterface;
-import Services.IDGenerator;
-
 /**
  * Product
  * An entity for a single product. Defines variables and methods for a product.
  */
-public class Product implements EntityInterface {
-    private final List<Consumer<Object>> CSV_LOAD_ORDER = new ArrayList<Consumer<Object>>();
-    private final List<Supplier<Object>> CSV_SAVE_ORDER = new ArrayList<Supplier<Object>>();
-    private final String PRODUCT_ID; // Primary key
+public class Product extends Entity {
     private String name;
     private double price; // Current price listed
     private double cost; // Current cost to make
     private ProductCategory category; // Assigned category
-    private boolean active; // If this product is purchaseable.
 
+    // Properties for handling math
     private int totalSales = 0;
     private double totalExpenses = 0.0;
     private double totalGrossSales = 0.0;
     private int dailySales = 0;
-    private boolean hasChanged = false;
 
     /**
      * Product
@@ -38,12 +26,12 @@ public class Product implements EntityInterface {
      */
     public Product(String name, double cost, double price, ProductCategory category) {
         super();
-        this.PRODUCT_ID = IDGenerator.generateGUID();
         this.name = name;
         this.cost = cost;
         this.price = price;
         this.category = category;
 
+        setLoadOrder();
         setSaveOrder();
     }
 
@@ -55,20 +43,8 @@ public class Product implements EntityInterface {
      * @param price double; price to buy from us
      * @param totalSales int; total sales for this product
      */
-    public Product(String name, final int id, double price, double cost, int totalSales, ProductCategory category) {
-        super();
-        this.name = name;
-        this.price = price;
-        this.cost = cost;
-        this.totalSales = totalSales;
-        this.category = category;
-        this.PRODUCT_ID = IDGenerator.generateGUID();
-
-        setSaveOrder();
-    }
-
-    public Product(final String ID) {
-        this.PRODUCT_ID = ID;
+    public Product(final String id) {
+        super(id);
         setLoadOrder();
         setSaveOrder();
     }
@@ -76,47 +52,32 @@ public class Product implements EntityInterface {
     /**
      * Methods to call to load a enitty from the database into the application.
      */
-    private void setLoadOrder() {
+    @Override
+    protected void setLoadOrder() {
         this.CSV_LOAD_ORDER.add(a -> emptyMethod());
         this.CSV_LOAD_ORDER.add(a -> setProductName(a.toString()));
         this.CSV_LOAD_ORDER.add(a -> setPrice(Double.parseDouble(a.toString())));
         this.CSV_LOAD_ORDER.add(a -> setCost(Double.parseDouble(a.toString())));
         this.CSV_LOAD_ORDER.add(a -> loadTotalSales(Integer.parseInt(a.toString())));
-        this.CSV_LOAD_ORDER.add(a -> setCategory(ProductCategory.valueOf(a.toString())));
+        this.CSV_LOAD_ORDER.add(a -> setCategory(ProductCategory.getEnum(a.toString())));
     }
 
     /**
      * Functions to call in order to safely modify the textfile database.
      */
-    private void setSaveOrder() {
-        // Sets load order operations
-        this.CSV_SAVE_ORDER.add(this::getID);
+    @Override
+    protected void setSaveOrder() {
+        this.CSV_SAVE_ORDER.add(super::getID);
         this.CSV_SAVE_ORDER.add(this::getProductName);
         this.CSV_SAVE_ORDER.add(this::getPrice);
         this.CSV_SAVE_ORDER.add(this::getCost);
         this.CSV_SAVE_ORDER.add(this::getTotalSales);
-        this.CSV_SAVE_ORDER.add(this::getCategory);
+        this.CSV_SAVE_ORDER.add(this::categoryName);
     }
 
     /* ___________________________________________
                         GETTERS
     ___________________________________________ */
-    public List<Consumer<Object>> getLoadOrder() {
-        return this.CSV_LOAD_ORDER;
-    }
-
-    public List<Supplier<Object>> getSaveOrder() {
-        return this.CSV_SAVE_ORDER;
-    }
-
-    /**
-     * Retrieves this entity's unique ID.
-     * @return int
-     */
-    public String getID() {
-        return this.PRODUCT_ID;
-    }
-
     /**
      * Returns this product's assigned category.
      * @return ProductCategory
@@ -125,20 +86,8 @@ public class Product implements EntityInterface {
         return this.category;
     }
 
-    /**
-     * Returns whether the entity has been modified.
-     * @return boolean
-     */
-    public boolean hasChanged() {
-        return this.hasChanged;
-    }
-
-    /**
-     * Will reset this entity's hasChanged state; indicating this entity has not been modified.
-     * @return void
-     */
-    public void resetChangedState() {
-        this.hasChanged = false;
+    public String categoryName() {
+        return this.category.name();
     }
 
     /**
@@ -228,14 +177,6 @@ public class Product implements EntityInterface {
     }
 
     /**
-     * Returns if the product is active or not.
-     * @return
-     */
-    public boolean isActive() {
-        return this.active;
-    }
-
-    /**
      * Called internally to load total sales from the DB to the entity.
      * @param totalSales
      */
@@ -248,16 +189,31 @@ public class Product implements EntityInterface {
      * @todo remove this
      */
     public void debugEntity() {
-        System.out.println(
-            "\n------------------------------------" +
-            "\n--| DEBUGGER |--" +
-            "\nClass " + this.getClass().getCanonicalName() + ";\n" +
-            (this.hasChanged ? " | PENDING CHANGES |" : "") +
-            "\n * Cost: " + getCost() +
-            "\n * Price: " + getPrice() +
-            "\n * YSales: " + getDailySales() +
-            "\n * TSales: " + getTotalSales() +
-            "\n-----------------------------------"
+        // Print header
+        System.out.println("\n------------------------------------" +
+                "\n--| DEBUGGER |--" +
+                "\nClass: " + this.getClass().getCanonicalName() + "\n" +
+                (super.hasChanged() ? " | PENDING CHANGES |" : "CURRENT") +
+                "\nOriginal Data\n" + super.getOriginalData() + "\n"
+        );
+
+        // Print fields
+        System.out.printf(
+            "\n * %16s: %s" +
+            "\n * %16s: %s" +
+            "\n * %16s: %s" +
+            "\n * %16s: %s" +
+            "\n * %16s: %s" +
+            "\n * %16s: %s" +
+            "\n * %16s: %s" +
+            "\n------------------------------------",
+            "Product Name", this.getProductName(),
+            "Category", (this.getCategory() != null ? this.getCategory().toString() : "null"),
+            "Cost", this.getCost(),
+            "Price", this.getPrice(),
+            "Yesterday Sales", this.getDailySales(),
+            "Today's Sales", this.getTotalSales(),
+            "Save/Load Ops", this.CSV_SAVE_ORDER.size() + "/" + this.CSV_LOAD_ORDER.size()
         );
     }
 
@@ -334,17 +290,6 @@ public class Product implements EntityInterface {
         this.totalGrossSales += (quantity * price);
     }
 
-    /**
-     * Sets if this product is active or not. If it is active, then
-     * customers may purchase it.
-     * @todo add this to the change history table
-     * @param state boolean
-     */
-    public void setActive(boolean state) {
-        this.active = state;
-    }
-
     public void emptyMethod() {
-        //
     }
 }

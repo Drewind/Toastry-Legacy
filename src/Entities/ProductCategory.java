@@ -5,6 +5,7 @@ public enum ProductCategory {
     SIDE_DISH,
     BEVERAGE,
     DESSERT,
+    SOUP,
     UNASSIGNED;
 
     public static ProductCategory getEnum(String value) {
@@ -12,6 +13,6 @@ public enum ProductCategory {
             if(v.name().equalsIgnoreCase(value)) return v;
         
         System.out.println("\n[WARNING] No ProductCategory was found for '" + value + "'. Returning UNASSIGNED.");
-        return UNASSIGNED;
+        return ProductCategory.UNASSIGNED;
     }
 }

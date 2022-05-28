@@ -1,14 +1,16 @@
 package Views.Home;
 
 import java.util.ArrayList;
+import java.util.Collection;
+
 import Entities.Product;
 import Graphics.Tables.EntityTableModel;
 import Interfaces.EntityInterface;
 
 public class TMTopSales extends EntityTableModel {
-    public TMTopSales(ArrayList<Product> products) {
+    public TMTopSales(Collection<Product> collection) {
         super();
-        for (Product entity : products) {
+        for (Product entity : collection) {
             super.addRow(entity);
         }
     }
@@ -37,7 +39,7 @@ public class TMTopSales extends EntityTableModel {
 
     public ArrayList<Product> getChangedProducts() {
         ArrayList<Product> entities = new ArrayList<>(super.getRowCount());
-        for (EntityInterface entity : super.entities) {
+        for (EntityInterface entity : super.entities.values()) {
             try {
                 entities.add((Product)entity);
             } catch (Exception ex) {

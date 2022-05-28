@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import Interfaces.EntityInterface;
 import Services.IDGenerator;
 
 /**
@@ -15,21 +16,47 @@ import Services.IDGenerator;
  * 
  * Use the following code to add a new function in the save sequence:
  * super.CSV_SAVE_ORDER.add(this::FUNCTION_NAME);
+ * 
+ * @param csvSaveOrder is a {@code List<Supplier<Object>>} containing operations to save data.
+ * @param csvLoadOrder is a {@code List<Consumer<Object>>} containing operations to load data.
  */
-public class Entity {
+public class Entity implements EntityInterface {
     protected final List<Consumer<Object>> CSV_LOAD_ORDER = new ArrayList<Consumer<Object>>();
     protected final List<Supplier<Object>> CSV_SAVE_ORDER = new ArrayList<Supplier<Object>>();
-    private final String ID;
-    private boolean hasChanged = false;
+    private final String ID;   // Unique ID of this entity.
+    private String originalData;
+    protected boolean hasChanged = false;
+    private boolean isActive = false;
 
 
     /**
-     * Creates an entity with a custom UID.
+     * Creates a blank entity.
      */
     public Entity(final String ID) {
         this.ID = ID;
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public Entity() {
+        this.ID = IDGenerator.generateGUID();
+        this.originalData = "";
+    }
+
+
+    public final String getOriginalData() {
+        return this.originalData;
+    }
+
+    public void setOriginalData(final String line) {
+        this.originalData = line;
+    }
 
     public final String getID() {
         return this.ID;
@@ -63,6 +90,8 @@ public class Entity {
 
     /**
      * Ordered list of functions to call to safely modify the textfile database.
+     * By default this will include a single operation to persist the UID,
+     * though entities inheriting from this class will enhance this array.
      * @return List<Supplier<Object>>
      */
     public List<Supplier<Object>> getSaveOrder() {
@@ -74,7 +103,11 @@ public class Entity {
      * Functions to call in order to safely modify the textfile database.
      */
     protected void setSaveOrder() {
-        // Sets load order operations
+        // Sets save order operations
         this.CSV_SAVE_ORDER.add(this::getID);
+    }
+
+    protected void setLoadOrder() {
+        // Sets load order operations
     }
 }

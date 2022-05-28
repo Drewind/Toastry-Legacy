@@ -1,5 +1,7 @@
 package Interfaces;
 
+import Entities.Entity;
+
 /**
  * Specific methods that the view actions require to keep their children updated.
  * 
@@ -8,8 +10,8 @@ package Interfaces;
  * the listeners from the model. This ensures view actions will be properly
  * able to update their children.
  */
-public interface ViewActionObserver<T> {
-    public void notifyNewEntity(T entity);   // Entity was added to model
-    public void notifyRemovedEntity(T entity); // Entity was removed from model
-    public void notifyModifiedEntity(T entity); // Entity was modified from model
+public interface ViewActionObserver {
+    public void notifyNewEntity(Entity entity);   // Entity was added to model
+    public void notifyRemovedEntity(Entity entity); // Entity was removed from model
+    public void notifyModifiedEntity(Entity entity); // Entity was modified from model
 }
