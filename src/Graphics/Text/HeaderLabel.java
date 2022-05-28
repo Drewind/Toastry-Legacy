@@ -3,10 +3,12 @@ package Graphics.Text;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import java.awt.Color;
+import java.awt.Font;
 
 public class HeaderLabel extends JLabel {
     private final Color HEADER_COLOR = new Color(40, 88, 130); // 285882
     private final Color TEXT_COLOR = new Color(250, 250, 250); // Default text color
+    private final Font FONT = new Font("Arial", Font.BOLD, 20);
 
     /**
      * HeaderLabel
@@ -28,6 +30,7 @@ public class HeaderLabel extends JLabel {
     private void setDefaults() {
         this.setOpaque(true);
         this.setForeground(this.TEXT_COLOR);
+        this.setFont(FONT);
         this.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 0));
     }
 }

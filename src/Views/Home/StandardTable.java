@@ -7,16 +7,24 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.*;
 
-public class SalesTable extends JTable {
+/**
+ * Creates a JTable object mapped with the input AbstractTableModel.
+ * 
+ * Two ways to use this class: headless or with headers. To use this
+ * partial without headers, simply instantiate SalesTable and add it
+ * as usual. With headers, instantiate the class and obtain the
+ * JScrollPane (panel) via getPanel().
+ */
+public class StandardTable extends JTable {
     private final AbstractTableModel tableModel;
     private final JScrollPane panel;
 
     /**
-     * Creates a SalesTable based of an array of column names and a AbstractTabelModel.
+     * Creates a standard table view based of an array of column names and a AbstractTabelModel.
      * @param COLUMNS String[] of column names
      * @param tableModel AbstractTableModel; the model of this table
      */
-    public SalesTable(AbstractTableModel tableModel) {
+    public StandardTable(AbstractTableModel tableModel) {
         this.tableModel = tableModel;
         super.setModel(this.tableModel);
         super.setRowHeight(24);
@@ -36,7 +44,7 @@ public class SalesTable extends JTable {
 
     /**
      * getPanel
-     * Returns the scroll panel.
+     * Returns the scroll panel. Use this method to display table headers.
      * @return JScrollPane
      */
     public JScrollPane getPanel() {

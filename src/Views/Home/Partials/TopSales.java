@@ -12,7 +12,7 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import Entities.Product;
-import Graphics.Text.NOTINUSE;
+import Graphics.Text.RegularDescription;
 import Graphics.Text.TitleBox;
 import Interfaces.ViewObserver;
 import Models.ProductModel;
@@ -47,7 +47,7 @@ public class TopSales extends JPanel implements ViewObserver {
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
         topPanel.add(new TitleBox("STORE FAVORITES", Styler.DARK_SHADE2_COLOR));
-        topPanel.add(new NOTINUSE("Best selling dishes from your restaurant."));
+        topPanel.add(new RegularDescription("Best selling dishes from your restaurant."));
 
         super.add(topPanel, BorderLayout.NORTH);
         super.add(scrollPane, BorderLayout.CENTER);

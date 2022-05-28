@@ -1,16 +1,23 @@
 package Graphics;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+
+import Utilities.Styler;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Dimension;
 
+/**
+ * Used by the Navbar to create clickable tabs.
+ */
 public class TabButton extends JButton {
-    private final Font FONT = new Font("Arial", Font.BOLD, 14);
-    private final Color TEXT_COLOR = new Color(250, 250, 250); // Default text color
-    private final Color ACTIVE_TEXT_COLOR = new Color(55, 122, 181); // 377AB5
-    private final Color ACTIVE_BG_COLOR = new Color(240, 240, 240);
-    private final Color BG_COLOR = new Color(40, 88, 130); // 285882
+    private final Font FONT = new Font("Arial", Font.BOLD, 18);
+    private Color activeBackground = Styler.APP_BG_COLOR;
+    private Color inactiveBackground = Styler.DARK_SHADE2_COLOR;
+    private Color activeColor = Styler.THEME_COLOR;
+    private Color inactiveColor = new Color(247, 247, 247);
 
     private boolean isActive = false;
 
@@ -25,12 +32,6 @@ public class TabButton extends JButton {
         this.setDefaults();
     }
 
-    public TabButton(String text, Color bgColor) {
-        super(text);
-        this.setDefaults();
-        this.setBackground(bgColor);
-    }
-
     /**
      * TabButton
      * Creates new tab button based on known dimensions. Defaults to inactive status.
@@ -41,22 +42,36 @@ public class TabButton extends JButton {
     public TabButton(String text, Dimension size) {
         super(text);
         this.setDefaults();
+        this.setMinimumSize(size);
         this.setPreferredSize(size);
         this.setMaximumSize(size);
     }
 
     private void setDefaults() {
-        this.setBackground(this.BG_COLOR);
-        this.setForeground(this.TEXT_COLOR);
+        this.setBackground(this.inactiveBackground);
+        this.setForeground(this.inactiveColor);
         this.setFont(this.FONT);
         this.setVisible(true);
         this.setOpaque(true);
-        this.setBorderPainted(false);
+        this.setBorder(BorderFactory.createMatteBorder(2, 2, 0, 2, Styler.DARK_SHADE2_COLOR));
+        setAsInactive();
     }
 
     public void setAsActive() {
         this.isActive = true;
-        this.setBackground(this.ACTIVE_BG_COLOR);
-        this.setForeground(this.ACTIVE_TEXT_COLOR);
+        this.setBackground(this.activeBackground);
+        this.setForeground(this.activeColor);
+        this.setBorderPainted(true);
+    }
+
+    public void setAsInactive() {
+        this.isActive = false;
+        this.setBackground(this.inactiveBackground);
+        this.setForeground(this.inactiveColor);
+        this.setBorderPainted(false);
+    }
+
+    public boolean isActive() {
+        return this.isActive;
     }
 }

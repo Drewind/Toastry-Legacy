@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 
 public class GBC {
     private static final int LAYOUT_MARGIN_X = 22;
-    private static final int LAYOUT_MARGIN_Y = 16;
+    private static final int LAYOUT_MARGIN_Y = 10;
 
     /**
      * Used to set the layout constraints for an element.

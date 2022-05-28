@@ -23,6 +23,7 @@ public class RegularText extends JLabel {
     public RegularText(String text, Color bgColor) {
         super(text);
         this.setBackground(bgColor);
+        this.setOpaque(true);
     }
 
     private void setDefaults() {

@@ -63,8 +63,6 @@ public class CreateForm extends JPanel implements FormInterface<Product> {
         RegularText paragraph = new RegularText("Create a new product and set its properties.");
         super.add(paragraph, gbc);
 
-        gbc.insets = Styler.DEFAULT_MARGINS;
-
         for (int i = 0; i < this.FIELDS.size(); i++) {
             // Component label
             GBC.setGBC(gbc, 0, (i + 1), 0.0);
@@ -101,7 +99,7 @@ public class CreateForm extends JPanel implements FormInterface<Product> {
 
     @Override
     public void updateView(final Product product) {
-        this.idField.setText(Integer.toString(product.getID()));
+        this.idField.setText(product.getID());
         this.nameField.setText(product.getProductName());
         this.priceField.setText(Double.toString(product.getPrice()));
         this.costField.setText(Double.toString(product.getCost()));

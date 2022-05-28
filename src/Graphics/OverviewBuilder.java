@@ -1,8 +1,8 @@
 package Graphics;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.util.HashMap;
+
+import javax.swing.JLabel;
 
 import Graphics.Containers.OverviewContainer;
 import Utilities.Styler;
@@ -11,16 +11,17 @@ import Utilities.Styler;
  * Container factory using the builder pattern.
  */
 public class OverviewBuilder {
-    private Color _containerColor = Styler.CONTAINER_BACKGROUND; // Defaults to the standard container bg.
-    private HashMap<Double, String> _content;
-    private Font _numberFont = new Font("Arial", Font.BOLD, 28);
-    private Font _labelFont = new Font("Arial", Font.PLAIN, 16);
+    private Color _containerColor = Styler.CONTAINER_BACKGROUND;    // Defaults to the standard container bg.
+    private Color _borderColor = new Color(                         // Defaults to a lighter shade of the app background.
+            Styler.APP_BG_COLOR.getRed() + 20, Styler.APP_BG_COLOR.getGreen() + 20, Styler.APP_BG_COLOR.getBlue() + 20);
+    private JLabel _content;
+    private String _description;
     private boolean _formatCurrency = true;
     
     public OverviewBuilder() {}
 
     public OverviewContainer buildContainer() {
-        return new OverviewContainer(_containerColor, _content, _numberFont, _labelFont, _formatCurrency);
+        return new OverviewContainer(_containerColor, _borderColor, _content, _description, _formatCurrency);
     }
 
     public OverviewBuilder bgColor(Color _containerColor) {
@@ -28,18 +29,18 @@ public class OverviewBuilder {
         return this;
     }
 
-    public OverviewBuilder content(HashMap<Double, String> _content) {
+    public OverviewBuilder borderColor(Color _borderColor) {
+        this._borderColor = _borderColor;
+        return this;
+    }
+
+    public OverviewBuilder content(JLabel _content) {
         this._content = _content;
         return this;
     }
 
-    public OverviewBuilder numberFont(Font _font) {
-        this._numberFont = _font;
-        return this;
-    }
-
-    public OverviewBuilder labelFont(Font _font) {
-        this._labelFont = _font;
+    public OverviewBuilder description(String text) {
+        this._description = text;
         return this;
     }
 

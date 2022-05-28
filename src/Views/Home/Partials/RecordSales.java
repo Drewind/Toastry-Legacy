@@ -11,19 +11,19 @@ import javax.swing.JPanel;
 
 import Controllers.HomeController;
 import Entities.Product;
-import Graphics.Text.NOTINUSE;
+import Graphics.Text.RegularDescription;
 import Graphics.Text.TitleBox;
 import Interfaces.ControllerInterface;
 import Interfaces.ViewObserver;
 import Models.IModelInterface;
 import Models.ProductModel;
 import Utilities.Styler;
-import Views.Home.SalesTable;
+import Views.Home.StandardTable;
 
 public class RecordSales extends JPanel implements ViewObserver {
     private final ProductModel model;
 
-    public RecordSales(ControllerInterface controller, IModelInterface<Product> model, SalesTable table) {
+    public RecordSales(ControllerInterface controller, IModelInterface<Product> model, StandardTable table) {
         super(new BorderLayout());
         super.setMinimumSize(new Dimension(0, 140));
         super.setVisible(true);
@@ -42,7 +42,7 @@ public class RecordSales extends JPanel implements ViewObserver {
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
         topPanel.add(new TitleBox("RECORD SALES", Styler.DARK_SHADE2_COLOR));
-        topPanel.add(new NOTINUSE("Enter sales for today and click 'End Day'."));
+        topPanel.add(new RegularDescription("Enter sales for today and click 'End Day'."));
 
         super.add(topPanel, BorderLayout.NORTH);
         super.add(table.getPanel(), BorderLayout.CENTER); // testing, new concept

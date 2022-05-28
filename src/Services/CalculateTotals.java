@@ -17,7 +17,7 @@ public class CalculateTotals {
     public Double computeGrossSales() {
         Double result = 0.0;
         for (Product product : this.model.getEntities()) {
-            result += product.getTotalGrossSales();
+            result += product.getTotalSales();
         }
         return result;
     }
@@ -25,7 +25,7 @@ public class CalculateTotals {
     public Double computeNetSales() {
         Double result = 0.0;
         for (Product product : this.model.getEntities()) {
-            result += (product.getTotalGrossSales() - product.getTotalExpenses());
+            result += (product.getTotalSales() - product.getTotalExpenses());
         }
         return result;
     }
